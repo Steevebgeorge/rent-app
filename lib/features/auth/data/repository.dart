@@ -16,13 +16,15 @@ class AuthRepository {
     }
   }
 
-  Future<void> signIn(String email, String password, String userName) async {
+  Future<void> signIn(
+      String email, String password, String userName, String location) async {
     try {
       final UserCredential credential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
 
       final uid = credential.user!.uid;
-      final user = AppUser(uid: uid, username: userName, email: email);
+      final user = AppUser(
+          uid: uid, username: userName, email: email, location: location);
       await _firestore.collection('app_Users').doc(uid).set(user.toJson());
     } on FirebaseAuthException catch (e) {
       throw Exception(_handleFirebaseAuthError(e));

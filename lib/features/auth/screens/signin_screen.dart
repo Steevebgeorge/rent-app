@@ -17,6 +17,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController userNameController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
 
   @override
   void dispose() {
@@ -42,7 +43,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 children: [
                   Column(
                     children: [
-                      SizedBox(height: size.height * 0.1),
+                      SizedBox(height: size.height * 0.05),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(100),
                         child: Image.asset(
@@ -76,16 +77,27 @@ class _SignInScreenState extends State<SignInScreen> {
                           icon: Icons.person,
                           isPassword: false,
                           controller: userNameController),
-                      SizedBox(height: size.height * 0.04),
+                      SizedBox(height: size.height * 0.03),
+                      CustomTextField(
+                          isDark: isDark,
+                          size: size,
+                          labelText: 'location',
+                          icon: Icons.pin_drop,
+                          isPassword: false,
+                          controller: locationController),
+                      SizedBox(height: size.height * 0.02),
                       GestureDetector(
                         onTap: () {
                           final userName = userNameController.text.trim();
                           final email = emailController.text.trim();
                           final password = passwordController.text.trim();
+                          final location = locationController.text.trim();
                           context.read<AuthBloc>().add(SignUpRequested(
-                              userName: userName,
-                              email: email,
-                              password: password));
+                                userName: userName,
+                                email: email,
+                                password: password,
+                                location: location,
+                              ));
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(

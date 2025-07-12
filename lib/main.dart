@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rent_app/app_providers.dart';
 import 'package:rent_app/constants/constants.dart';
 import 'package:rent_app/constants/routes.dart';
-import 'package:rent_app/features/auth/bloc/auth_bloc.dart';
 import 'package:rent_app/features/auth/screens/login_screen.dart';
 import 'package:rent_app/features/auth/screens/signin_screen.dart';
 import 'package:rent_app/features/home/screens/tabcontroller.dart';
@@ -13,14 +12,7 @@ import 'package:rent_app/firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => AuthBloc()),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  runApp(AppProviders());
 }
 
 class MyApp extends StatelessWidget {
@@ -96,3 +88,4 @@ class AuthGate extends StatelessWidget {
     );
   }
 }
+ 

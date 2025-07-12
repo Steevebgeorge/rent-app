@@ -20,6 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final email = event.email.trim();
       final password = event.password.trim();
       final userName = event.userName.trim();
+      final location = event.location.trim();
 
       if (email.isEmpty) {
         emit(AuthFailure(error: 'Email cannot be empty'));
@@ -34,11 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
 
-      await _authRepository.signIn(
-        email,
-        password,
-        userName,
-      );
+      await _authRepository.signIn(email, password, userName, location);
       emit(AuthSuccess());
     } catch (e) {
       emit(AuthFailure(error: e.toString()));

@@ -2,8 +2,10 @@ class AppUser {
   final String uid;
   final String username;
   final String email;
+  final String location;
 
   AppUser({
+    required this.location,
     required this.uid,
     required this.username,
     required this.email,
@@ -14,6 +16,7 @@ class AppUser {
       'uid': uid,
       'username': username,
       'email': email,
+      'location': location,
     };
   }
 
@@ -22,6 +25,7 @@ class AppUser {
       uid: json['uid'],
       username: json['username'],
       email: json['email'],
+      location: json['location'],
     );
   }
 }

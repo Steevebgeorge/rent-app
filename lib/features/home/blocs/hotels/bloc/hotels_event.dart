@@ -1,4 +1,5 @@
 part of 'hotels_bloc.dart';
 
-@immutable
 sealed class HotelsEvent {}
+
+class FetchHotels extends HotelsEvent {}
