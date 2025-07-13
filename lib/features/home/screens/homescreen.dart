@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rent_app/features/home/blocs/hotels/bloc/hotels_bloc.dart';
 import 'package:rent_app/features/home/blocs/user/bloc/user_bloc.dart';
+import 'package:rent_app/features/maps/screens/map_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,11 +15,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  late List<dynamic> _filteredHotels = [];
   @override
   void initState() {
     super.initState();
     context.read<UserBloc>().add(LoadUserData());
     context.read<HotelsBloc>().add(FetchHotels());
+    _searchController.addListener(() {
+      setState(() {
+      });
+    });
   }
 
   @override
@@ -85,7 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             actions: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => MapScreen(),
+                    ));
+                  },
+                  icon: const Icon(Icons.search)),
               const SizedBox(width: 10),
               IconButton(
                   onPressed: () {},
@@ -103,6 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: bannerCarousel(size),
               ),
               SizedBox(height: size.height * 0.02),
+              textfield(context),
+              SizedBox(height: size.height * 0.02),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
@@ -118,11 +133,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (state is HotelLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is HotelLoaded) {
+                    final query = _searchController.text.toLowerCase();
                     final hotels = state.loadedHotelData;
+
+                    _filteredHotels = query.isEmpty
+                        ? hotels
+                        : hotels.where((hotel) {
+                            return hotel.name.toLowerCase().contains(query) ||
+                                hotel.location.toLowerCase().contains(query);
+                          }).toList();
 
                     return SingleChildScrollView(
                       child: Column(
-                        children: hotels.map((hotel) {
+                        children: _filteredHotels.map((hotel) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 20),
@@ -154,7 +177,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
 
-                                // Optional hotel name or details
                                 Container(
                                   padding: const EdgeInsets.only(
                                       bottom: 22, top: 10),
@@ -262,6 +284,44 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       },
+    );
+  }
+
+  Padding textfield(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          hintText: 'Search by name or location',
+          prefixIcon: const Icon(Icons.search),
+          suffixIcon: _searchController.text.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    _searchController.clear();
+                    FocusScope.of(context).unfocus();
+                    setState(() {});
+                  },
+                )
+              : null,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.grey),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.grey),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.grey),
+          ),
+        ),
+        onChanged: (value) {
+          setState(() {});
+        },
+      ),
     );
   }
 
