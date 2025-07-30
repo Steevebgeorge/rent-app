@@ -1,10 +1,12 @@
 import 'package:another_carousel_pro/another_carousel_pro.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rent_app/features/home/blocs/hotels/bloc/hotels_bloc.dart';
 import 'package:rent_app/features/home/blocs/user/bloc/user_bloc.dart';
+import 'package:rent_app/features/hotel%20details/screens/detailsscreen.dart';
 import 'package:rent_app/features/maps/screens/map_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,15 +19,22 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   late List<dynamic> _filteredHotels = [];
+
   @override
   void initState() {
     super.initState();
     context.read<UserBloc>().add(LoadUserData());
     context.read<HotelsBloc>().add(FetchHotels());
+
     _searchController.addListener(() {
-      setState(() {
-      });
+      setState(() {}); // Rebuild to show/hide clear button
     });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -42,9 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     return BlocConsumer<UserBloc, UserState>(
-      listener: (context, state) {
-        // Optional: show error/snackbars here if needed
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         String username = 'Guest';
         String location = 'Unknown';
@@ -78,8 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     const Icon(Icons.pin_drop, size: 16, color: Colors.grey),
                     const SizedBox(width: 4),
-                    SizedBox(
-                      width: 200,
+                    Expanded(
                       child: Text(
                         location,
                         style:
@@ -88,21 +94,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ],
-                ),
+                )
               ],
             ),
             actions: [
               IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => MapScreen(),
-                    ));
-                  },
-                  icon: const Icon(Icons.search)),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MapScreen(),
+                  ));
+                },
+                icon: const Icon(Icons.search),
+              ),
               const SizedBox(width: 10),
               IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.notifications_active)),
+                onPressed: () {},
+                icon: const Icon(Icons.notifications_active),
+              ),
               const SizedBox(width: 15),
             ],
           ),
@@ -116,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: bannerCarousel(size),
               ),
               SizedBox(height: size.height * 0.02),
-              textfield(context),
+              searchTextField(context),
               SizedBox(height: size.height * 0.02),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -143,30 +151,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                 hotel.location.toLowerCase().contains(query);
                           }).toList();
 
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: _filteredHotels.map((hotel) {
-                          return Padding(
+                    return Column(
+                      children: _filteredHotels.map((hotel) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  HotelDetailsScreen(snap: hotel),
+                            ));
+                          },
+                          child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Carousel Section
                                 SizedBox(
                                   height: 200,
                                   width: double.infinity,
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(20),
                                         topRight: Radius.circular(20)),
                                     child: AnotherCarousel(
-                                      images: hotel.images.map((url) {
-                                        return Image.network(
-                                          url,
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                        );
+                                      images: hotel.images.map<Widget>((url) {
+                                        return CachedNetworkImage(
+                                            imageUrl: url,
+                                            fit: BoxFit.cover,
+                                            width: double.infinity);
                                       }).toList(),
                                       dotSize: 6.0,
                                       dotSpacing: 15.0,
@@ -176,7 +188,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-
                                 Container(
                                   padding: const EdgeInsets.only(
                                       bottom: 22, top: 10),
@@ -210,24 +221,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         Row(
-                                          spacing: 5,
                                           children: [
-                                            Icon(
+                                            const Icon(
                                               Icons.pin_drop_rounded,
                                               size: 18,
                                               color: Colors.grey,
                                             ),
-                                            Text(hotel.location,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall
-                                                    ?.copyWith(
-                                                        color: Colors.grey)),
-                                            Spacer(),
+                                            Text(
+                                              hotel.location,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleSmall
+                                                  ?.copyWith(
+                                                      color: Colors.grey),
+                                            ),
+                                            const Spacer(),
                                             RichText(
                                               text: TextSpan(
-                                                text:
-                                                    '₹${hotel.price.toInt().toString()}',
+                                                text: '₹${hotel.price.toInt()}',
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge
@@ -246,34 +257,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ),
                                                 ],
                                               ),
-                                            )
+                                            ),
                                           ],
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          spacing: 5,
                                           children: [
-                                            Icon(
+                                            const Icon(
                                               Icons.star,
                                               size: 17,
                                               color: Colors.yellow,
                                             ),
-                                            Text(hotel.rating.toString(),
-                                                style: TextStyle(fontSize: 17))
+                                            Text(
+                                              hotel.rating.toString(),
+                                              style:
+                                                  const TextStyle(fontSize: 17),
+                                            ),
                                           ],
-                                        )
+                                        ),
                                       ],
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
-                          );
-                        }).toList(),
-                      ),
+                          ),
+                        );
+                      }).toList(),
                     );
                   }
 
@@ -287,11 +296,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Padding textfield(BuildContext context) {
+  Widget searchTextField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: TextField(
         controller: _searchController,
+        textInputAction: TextInputAction.done,
+        onSubmitted: (_) => FocusScope.of(context).unfocus(),
         decoration: InputDecoration(
           hintText: 'Search by name or location',
           prefixIcon: const Icon(Icons.search),
@@ -318,9 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
             borderSide: const BorderSide(color: Colors.grey),
           ),
         ),
-        onChanged: (value) {
-          setState(() {});
-        },
+        onChanged: (value) => setState(() {}),
       ),
     );
   }
