@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rent_app/constants/routes.dart';
+import 'package:rent_app/features/confirmbooking/models/bookingconfirmmodel.dart';
 
-class PaymentSuccessScreen extends StatelessWidget {
-  const PaymentSuccessScreen({super.key});
+import '../bloc/confirm_booking_bloc.dart';
+import '../bloc/confirm_booking_event.dart';
+
+class PaymentSuccessScreen extends StatefulWidget {
+  final BookingModel booking;
+  const PaymentSuccessScreen({super.key, required this.booking});
+
+  @override
+  State<PaymentSuccessScreen> createState() => _PaymentSuccessScreenState();
+}
+
+class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ConfirmBookingBloc>().add(
+          ConfirmBookingSubmitted(booking: widget.booking),
+        );
+  }
 
   @override
   Widget build(BuildContext context) {

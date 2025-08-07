@@ -1,11 +1,13 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:rent_app/features/booking%20checkout/bloc/stripe_payment_bloc.dart';
+import 'package:rent_app/features/confirmbooking/models/bookingconfirmmodel.dart';
+import 'package:rent_app/features/confirmbooking/screens/paymentsuccess.dart';
 import 'package:rent_app/features/home/models/hotelmodel.dart';
-import 'package:rent_app/paymentsuccess.dart';
 
 class BookingCheckOutScreen extends StatelessWidget {
   final HotelModel snap;
@@ -34,7 +36,19 @@ class BookingCheckOutScreen extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const PaymentSuccessScreen(),
+              builder: (context) => PaymentSuccessScreen(
+                booking: BookingModel(
+                  userId: FirebaseAuth.instance.currentUser!.uid,
+                  hotelId: snap.uid,
+                  hotelName: snap.name,
+                  checkIn: selectedDateRange.start,
+                  checkOut: selectedDateRange.end,
+                  guests: guestCount,
+                  totalPrice: totalPrice,
+                  paymentStatus: 'paid',
+                  createdAt: DateTime.now(),
+                ),
+              ),
             ),
           );
         } else if (state is PaymentError) {

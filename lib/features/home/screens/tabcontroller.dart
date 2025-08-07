@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:rent_app/features/bookings/screens/booking_screen.dart';
 import 'package:rent_app/features/home/screens/homescreen.dart';
 import 'package:rent_app/features/maps/screens/map_screen.dart';
-import 'package:rent_app/features/messages/screens/message_screen.dart';
 import 'package:rent_app/features/profile/screens/profile_screen.dart';
 import 'package:rent_app/features/wishlist/screens/wishlist_screen.dart';
 
@@ -13,13 +13,13 @@ class Tabcontroller extends StatefulWidget {
 }
 
 class _TabcontrollerState extends State<Tabcontroller> {
-  int _index = 0;
+  int _index = 3;
 
   final List<Widget> screens = const [
     HomeScreen(),
     MapScreen(),
     WishListScreen(),
-    MessageScreen(),
+    BookingScreen(),
     ProfileScreen(),
   ];
 
@@ -40,7 +40,7 @@ class _TabcontrollerState extends State<Tabcontroller> {
           BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite), label: 'Favourites'),
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Messages'),
+          BottomNavigationBarItem(icon: Icon(Icons.hotel), label: 'bookings'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
