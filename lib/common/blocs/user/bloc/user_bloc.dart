@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rent_app/features/auth/models/usermodel.dart';
-import 'package:rent_app/features/home/repository/services.dart';
+import 'package:rent_app/common/repository/services.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';

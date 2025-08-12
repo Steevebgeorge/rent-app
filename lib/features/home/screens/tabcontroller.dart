@@ -13,7 +13,7 @@ class Tabcontroller extends StatefulWidget {
 }
 
 class _TabcontrollerState extends State<Tabcontroller> {
-  int _index = 3;
+  int _index = 0;
 
   final List<Widget> screens = const [
     HomeScreen(),
@@ -25,9 +25,12 @@ class _TabcontrollerState extends State<Tabcontroller> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: screens[_index],
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: isDark ? Colors.white : Colors.black,
         currentIndex: _index,
         onTap: (value) {
           setState(() {

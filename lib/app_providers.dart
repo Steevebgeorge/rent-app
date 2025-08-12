@@ -5,7 +5,7 @@ import 'package:rent_app/features/booking%20checkout/bloc/stripe_payment_bloc.da
 import 'package:rent_app/features/bookings/blocs/fetchbookings/bloc/fetchbookings_bloc.dart';
 import 'package:rent_app/features/confirmbooking/bloc/confirm_booking_bloc.dart';
 import 'package:rent_app/features/home/blocs/hotels/bloc/hotels_bloc.dart';
-import 'package:rent_app/features/home/blocs/user/bloc/user_bloc.dart';
+import 'package:rent_app/common/blocs/user/bloc/user_bloc.dart';
 import 'package:rent_app/features/hotel%20details/blocs/review%20fetch%20bloc/hotelreviews_bloc.dart';
 import 'package:rent_app/features/hotel%20details/blocs/review%20save%20bloc/bloc/savereview_bloc.dart';
 

@@ -136,17 +136,17 @@ class DetailsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
         width: size.width * 0.9,
-        height: size.height * 0.4,
+        // Removed fixed height
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: const Color.fromARGB(125, 33, 33, 33)),
+          borderRadius: BorderRadius.circular(20),
+          color: const Color.fromARGB(125, 33, 33, 33),
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
           child: Column(
-            spacing: 5,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -156,61 +156,85 @@ class DetailsContainer extends StatelessWidget {
                     .headlineLarge
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+
+              // Dates
               Row(
                 children: [
-                  Icon(Icons.calendar_month),
-                  SizedBox(width: 5),
+                  const Icon(Icons.calendar_month),
+                  const SizedBox(width: 5),
                   Text('Dates',
                       style: Theme.of(context).textTheme.headlineSmall),
-                  Spacer(),
-                  Text(
-                    '${DateFormat('dd MMMM ').format(selectedDateRange.start)} - ${DateFormat('dd MMMM yyyy').format(selectedDateRange.end)}',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  )
+                  const Spacer(),
+                  Flexible(
+                    child: Text(
+                      '${DateFormat('dd MMMM ').format(selectedDateRange.start)} - ${DateFormat('dd MMMM yyyy').format(selectedDateRange.end)}',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+
+              // Room Type
               Row(
                 children: [
-                  Icon(Icons.meeting_room_sharp),
-                  SizedBox(width: 5),
+                  const Icon(Icons.meeting_room_sharp),
+                  const SizedBox(width: 5),
                   Text('Room Type',
                       style: Theme.of(context).textTheme.headlineSmall),
-                  Spacer(),
-                  Text(snap.type,
-                      style: Theme.of(context).textTheme.headlineSmall)
+                  const Spacer(),
+                  Flexible(
+                    child: Text(
+                      snap.type,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+
+              // Phone
               Row(
                 children: [
-                  Icon(Icons.phone),
-                  SizedBox(width: 5),
+                  const Icon(Icons.phone),
+                  const SizedBox(width: 5),
                   Text('Phone',
                       style: Theme.of(context).textTheme.headlineSmall),
-                  Spacer(),
-                  Text(snap.hostPhone,
-                      style: Theme.of(context).textTheme.headlineSmall)
+                  const Spacer(),
+                  Flexible(
+                    child: Text(
+                      snap.hostPhone,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+
+              // Guests
               Row(
                 children: [
-                  Icon(Icons.person),
-                  SizedBox(width: 5),
+                  const Icon(Icons.person),
+                  const SizedBox(width: 5),
                   Text('Guests',
                       style: Theme.of(context).textTheme.headlineSmall),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     guestCount.toString(),
                     style: Theme.of(context).textTheme.headlineSmall,
-                  )
+                  ),
                 ],
               ),
-              SizedBox(height: 10),
-              Divider(),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+
+              const Divider(),
+              const SizedBox(height: 10),
+
               Text(
                 'Price Details',
                 style: Theme.of(context)
@@ -218,18 +242,19 @@ class DetailsContainer extends StatelessWidget {
                     .headlineLarge
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+
               Row(
                 children: [
-                  Icon(Icons.attach_money_rounded),
-                  SizedBox(width: 5),
+                  const Icon(Icons.attach_money_rounded),
+                  const SizedBox(width: 5),
                   Text('Total Price',
                       style: Theme.of(context).textTheme.headlineSmall),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     '₹$totalPrice',
                     style: Theme.of(context).textTheme.headlineSmall,
-                  )
+                  ),
                 ],
               ),
             ],
@@ -268,7 +293,6 @@ class CheckoutTitleWidgets extends StatelessWidget {
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 10,
           children: [
             Text(
               snap.name,
@@ -283,21 +307,16 @@ class CheckoutTitleWidgets extends StatelessWidget {
                   .textTheme
                   .titleMedium
                   ?.copyWith(fontWeight: FontWeight.bold),
+              overflow: TextOverflow.ellipsis,
             ),
-            Text('${snap.price.toInt().toString()} / per day')
+            Text('${snap.price.toInt()} / per day')
           ],
         ),
-        SizedBox(
-          child: Row(
-            spacing: 2,
-            children: [
-              Icon(
-                Icons.star,
-                color: Colors.yellow,
-              ),
-              Text(snap.rating.toString()),
-            ],
-          ),
+        Row(
+          children: [
+            const Icon(Icons.star, color: Colors.yellow),
+            Text(snap.rating.toString()),
+          ],
         )
       ],
     );

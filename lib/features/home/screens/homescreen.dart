@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rent_app/features/home/blocs/hotels/bloc/hotels_bloc.dart';
-import 'package:rent_app/features/home/blocs/user/bloc/user_bloc.dart';
+import 'package:rent_app/common/blocs/user/bloc/user_bloc.dart';
 import 'package:rent_app/features/hotel%20details/screens/detailsscreen.dart';
 import 'package:rent_app/features/maps/screens/map_screen.dart';
 
