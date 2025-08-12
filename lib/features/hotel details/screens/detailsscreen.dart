@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rent_app/features/book%20hotels/screens/bookingscreen.dart';
 import 'package:rent_app/features/home/models/hotelmodel.dart';
 import 'package:rent_app/features/hotel%20details/blocs/review%20fetch%20bloc/hotelreviews_bloc.dart';
+import 'package:rent_app/features/hotel%20details/blocs/save%20favourite/bloc/save_favourite_bloc.dart';
 import 'package:rent_app/features/hotel%20details/widgets/review.dart';
 
 class HotelDetailsScreen extends StatefulWidget {
@@ -500,22 +501,45 @@ class DetailPageImageCarousel extends StatelessWidget {
                   )),
             )),
         Positioned(
-            top: 20,
-            right: 25,
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
+          top: 20,
+          right: 25,
+          child: BlocBuilder<SaveFavouriteBloc, SaveFavouriteState>(
+            builder: (context, state) {
+              bool isFavourite = false;
+
+              if (state is SaveFavouriteSuccess) {
+                isFavourite = state.favourites.contains(snap.uid);
+              }
+
+              return Container(
+                width: 60,
+                height: 60,
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color.fromARGB(73, 0, 0, 0)),
-              child: IconButton(
-                  onPressed: () {},
+                  color: Color.fromARGB(73, 0, 0, 0),
+                ),
+                child: IconButton(
+                  onPressed: () {
+                    if (isFavourite) {
+                      context
+                          .read<SaveFavouriteBloc>()
+                          .add(RemoveFavouriteEvent(snap.uid));
+                    } else {
+                      context
+                          .read<SaveFavouriteBloc>()
+                          .add(AddFavouriteEvent(snap.uid));
+                    }
+                  },
                   icon: Icon(
-                    Icons.favorite_border,
+                    isFavourite ? Icons.favorite : Icons.favorite_border,
                     size: 30,
-                    color: Colors.white,
-                  )),
-            )),
+                    color: isFavourite ? Colors.red : Colors.white,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
         Positioned(
           bottom: 10,
           right: 20,
