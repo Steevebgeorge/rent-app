@@ -1,7 +1,10 @@
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rent_app/features/book%20hotels/screens/bookingscreen.dart';
 import 'package:rent_app/features/home/models/hotelmodel.dart';
 import 'package:rent_app/features/hotel%20details/blocs/review%20fetch%20bloc/hotelreviews_bloc.dart';
@@ -72,6 +75,39 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                     ReviewSection(
                       hotelId: widget.snap.uid,
                     ), // 👈 Add this line
+                    SizedBox(height: 15),
+
+                    SizedBox(
+                      width: size.width,
+                      height: size.width * 0.5,
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(
+                            widget.snap.latitude,
+                            widget.snap.longitude,
+                          ),
+                          zoom: 12,
+                        ),
+                        markers: {
+                          Marker(
+                            markerId: const MarkerId("hotel_location"),
+                            position: LatLng(
+                              widget.snap.latitude,
+                              widget.snap.longitude,
+                            ),
+                            infoWindow: InfoWindow(title: widget.snap.name),
+                          ),
+                        },
+                        zoomControlsEnabled: false,
+                        myLocationButtonEnabled: false,
+                        gestureRecognizers: <Factory<
+                            OneSequenceGestureRecognizer>>{
+                          Factory<OneSequenceGestureRecognizer>(
+                            () => EagerGestureRecognizer(),
+                          ),
+                        },
+                      ),
+                    ),
                     SizedBox(height: 10),
                     HostSection(widget: widget),
                   ],
