@@ -36,89 +36,87 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 100),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DetailPageImageCarousel(snap: widget.snap),
-              SizedBox(height: 30),
-              nameAndDescription(context),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Divider(
-                      color: const Color.fromARGB(87, 158, 158, 158),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Facilities',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 10),
-                    FacilitiesContainer(widget: widget, isDark: isDark),
-                    SizedBox(height: 10),
-                    Divider(),
-                    CancelationPolicies(widget: widget),
-                    Divider(),
-                    SizedBox(height: 10),
-                    HouseRulesWidget(widget: widget),
-                    SizedBox(height: 10),
-                    Divider(),
-                    SizedBox(height: 10),
-                    ReviewSection(
-                      hotelId: widget.snap.uid,
-                    ), // 👈 Add this line
-                    SizedBox(height: 15),
+    return Scaffold(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 100),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            DetailPageImageCarousel(snap: widget.snap),
+            SizedBox(height: 30),
+            nameAndDescription(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Divider(
+                    color: const Color.fromARGB(87, 158, 158, 158),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Facilities',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  FacilitiesContainer(widget: widget, isDark: isDark),
+                  SizedBox(height: 10),
+                  Divider(),
+                  CancelationPolicies(widget: widget),
+                  Divider(),
+                  SizedBox(height: 10),
+                  HouseRulesWidget(widget: widget),
+                  SizedBox(height: 10),
+                  Divider(),
+                  SizedBox(height: 10),
+                  ReviewSection(
+                    hotelId: widget.snap.uid,
+                  ), // 👈 Add this line
+                  SizedBox(height: 15),
 
-                    SizedBox(
-                      width: size.width,
-                      height: size.width * 0.5,
-                      child: GoogleMap(
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(
+                  SizedBox(
+                    width: size.width,
+                    height: size.width * 0.5,
+                    child: GoogleMap(
+                      initialCameraPosition: CameraPosition(
+                        target: LatLng(
+                          widget.snap.latitude,
+                          widget.snap.longitude,
+                        ),
+                        zoom: 12,
+                      ),
+                      markers: {
+                        Marker(
+                          markerId: const MarkerId("hotel_location"),
+                          position: LatLng(
                             widget.snap.latitude,
                             widget.snap.longitude,
                           ),
-                          zoom: 12,
+                          infoWindow: InfoWindow(title: widget.snap.name),
                         ),
-                        markers: {
-                          Marker(
-                            markerId: const MarkerId("hotel_location"),
-                            position: LatLng(
-                              widget.snap.latitude,
-                              widget.snap.longitude,
-                            ),
-                            infoWindow: InfoWindow(title: widget.snap.name),
-                          ),
-                        },
-                        zoomControlsEnabled: false,
-                        myLocationButtonEnabled: false,
-                        gestureRecognizers: <Factory<
-                            OneSequenceGestureRecognizer>>{
-                          Factory<OneSequenceGestureRecognizer>(
-                            () => EagerGestureRecognizer(),
-                          ),
-                        },
-                      ),
+                      },
+                      zoomControlsEnabled: false,
+                      myLocationButtonEnabled: false,
+                      gestureRecognizers: <Factory<
+                          OneSequenceGestureRecognizer>>{
+                        Factory<OneSequenceGestureRecognizer>(
+                          () => EagerGestureRecognizer(),
+                        ),
+                      },
                     ),
-                    SizedBox(height: 10),
-                    HostSection(widget: widget),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                  SizedBox(height: 10),
+                  HostSection(widget: widget),
+                ],
+              ),
+            )
+          ],
         ),
-        bottomSheet: CustomBottomSheet(widget: widget, size: size),
       ),
+      bottomSheet: CustomBottomSheet(widget: widget, size: size),
     );
   }
 
