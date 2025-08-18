@@ -9,6 +9,7 @@ import 'package:rent_app/features/home/blocs/hotels/bloc/hotels_bloc.dart';
 import 'package:rent_app/features/hotel%20details/blocs/review%20fetch%20bloc/hotelreviews_bloc.dart';
 import 'package:rent_app/features/hotel%20details/blocs/review%20save%20bloc/bloc/savereview_bloc.dart';
 import 'package:rent_app/features/hotel%20details/blocs/save%20favourite/bloc/save_favourite_bloc.dart';
+import 'package:rent_app/features/profile%20updating/bloc/bloc/update_profile_bloc.dart';
 
 import 'main.dart';
 
@@ -27,7 +28,8 @@ class AppProviders extends StatelessWidget {
         BlocProvider(create: (_) => StripePaymentBloc()),
         BlocProvider(create: (_) => ConfirmBookingBloc()),
         BlocProvider(create: (_) => FetchbookingsBloc()),
-        BlocProvider(create: (_) => SaveFavouriteBloc())
+        BlocProvider(create: (_) => SaveFavouriteBloc()),
+        BlocProvider(create: (_) => UpdateProfileBloc())
       ],
       child: const MyApp(),
     );

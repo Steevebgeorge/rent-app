@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rent_app/common/blocs/user/bloc/user_bloc.dart';
 import 'package:rent_app/features/auth/bloc/auth_bloc.dart';
+import 'package:rent_app/features/profile%20updating/screens/profile_update_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -107,14 +108,19 @@ class ProfileScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         elevation: 4,
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 24, horizontal: 16),
                           child: Column(
                             children: [
                               ListTile(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => UpdateProfileScreen(),
+                                  ));
+                                },
                                 leading: Icon(Icons.settings),
-                                title: Text("Account Settings"),
+                                title: Text("Update Profile"),
                               ),
                               Divider(),
                               ListTile(
