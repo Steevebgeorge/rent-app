@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:rent_app/app_providers.dart';
@@ -8,14 +9,21 @@ import 'package:rent_app/constants/routes.dart';
 import 'package:rent_app/features/auth/screens/login_screen.dart';
 import 'package:rent_app/features/auth/screens/signin_screen.dart';
 import 'package:rent_app/features/home/screens/tabcontroller.dart';
+import 'package:rent_app/features/notifications/repository/notifications.dart';
 import 'package:rent_app/firebase_options.dart';
 import 'package:rent_app/keys.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   Stripe.publishableKey = publishableKey;
   await Stripe.instance.applySettings();
+
+  await NotificationService().initializeNotification();
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   runApp(AppProviders());
 }
 

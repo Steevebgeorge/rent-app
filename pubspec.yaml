@@ -50,6 +50,8 @@ dependencies:
   http: ^1.4.0
   google_maps_flutter: ^2.12.3
   location: ^8.0.1
+  flutter_local_notifications: ^19.4.0
+  firebase_messaging: ^15.2.10
 
 dev_dependencies:
   flutter_test:
